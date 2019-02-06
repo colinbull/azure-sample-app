@@ -5,6 +5,7 @@ using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Data;
 using Telerik.Sitefinity.Modules.Pages;
 using Telerik.Sitefinity.Pages.Model;
+using Telerik.Sitefinity.Publishing;
 using Telerik.Sitefinity.Security;
 
 [assembly: WebActivatorEx.PostApplicationStartMethod(typeof(SitefinityWebApp.AzureServiceBusPublisher), "Start")]
@@ -21,13 +22,15 @@ namespace SitefinityWebApp {
             Trace.WriteLine("AzureServicePublisher: Bootstrapped");
             if (e.CommandName == "Bootstrapped")
             {
-                PageManager.Executing += new EventHandler<Telerik.Sitefinity.Data.ExecutingEventArgs>(PageManager_Executing);
+                PublishingManager.Executing += OnPublished;
             }
         }
-        public static void PageManager_Executing(object sender, Telerik.Sitefinity.Data.ExecutingEventArgs e)
+
+        private static void OnPublished(object sender, ExecutingEventArgs e)
         {
             Trace.WriteLine($"AzureServicePublisher: Executing event {e.Dump()}");
         }
+
     }
     
 }
