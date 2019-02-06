@@ -3,11 +3,15 @@ using System.Diagnostics;
 using ServiceStack.Text;
 using Telerik.Sitefinity.Abstractions;
 using Telerik.Sitefinity.Data;
+using Telerik.Sitefinity.Data.Events;
+using Telerik.Sitefinity.GenericContent.Model;
 using Telerik.Sitefinity.Modules.GenericContent;
 using Telerik.Sitefinity.Modules.Pages;
 using Telerik.Sitefinity.Pages.Model;
 using Telerik.Sitefinity.Publishing;
 using Telerik.Sitefinity.Security;
+using Telerik.Sitefinity.Services;
+using Telerik.Sitefinity.Services.Events;
 
 [assembly: WebActivatorEx.PostApplicationStartMethod(typeof(SitefinityWebApp.AzureServiceBusPublisher), "Start")]
 
@@ -20,11 +24,13 @@ namespace SitefinityWebApp {
         public static void Bootstrapper_Initialized(object sender, Telerik.Sitefinity.Data.ExecutedEventArgs e)
         {
             
-            Trace.WriteLine("AzureServicePublisher: Bootstrapped");
+           
             if (e.CommandName == "Bootstrapped")
             {
-                PublishingManager.Executing += OnPublished;
-                ContentManager.Executing += OnContentEvent;
+                Trace.WriteLine("AzureServicePublisher: Bootstrapped");
+                EventHub.Subscribe<IDataEvent>(OnDataEvent);
+              //  PublishingManager.Executing += OnPublished;
+               // ContentManager.Executing += OnContentEvent;
             }
         }
 
@@ -37,6 +43,11 @@ namespace SitefinityWebApp {
         {
             Trace.WriteLine($"AzureServicePublisher: Executing publishing event {e.GetType().FullName} {e.Dump()}");
    
+        }
+        
+        private static void OnDataEvent(IDataEvent e)
+        {
+            Trace.WriteLine($"AzureServicePublisher: Executing data event {e.GetType().FullName} {e.Dump()}");
         }
 
     }
