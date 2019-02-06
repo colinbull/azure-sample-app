@@ -52,10 +52,10 @@ namespace SitefinityWebApp {
             var itemId = e.ItemId;
             var providerName = e.ProviderName;
 
-//            var manager = ManagerBase.GetMappedManager(contentType, providerName);
-//            var item = manager.GetItemOrDefault(contentType, itemId);
+            var manager = ManagerBase.GetMappedManager(contentType, providerName);
+            var item = manager.GetItemOrDefault(contentType, itemId);
             
-            Trace.WriteLine($"AzureServicePublisher: Executing data event {action} {contentType} {itemId} {providerName}");
+            Trace.WriteLine($"AzureServicePublisher: Executing data event {action} {contentType} {itemId} {providerName} - {item.Dump()}");
         }
 
     }
