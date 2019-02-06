@@ -47,7 +47,15 @@ namespace SitefinityWebApp {
         
         private static void OnDataEvent(IDataEvent e)
         {
-            Trace.WriteLine($"AzureServicePublisher: Executing data event {e.GetType().FullName} {e.Dump()}");
+            var action = e.Action;
+            var contentType = e.ItemType;
+            var itemId = e.ItemId;
+            var providerName = e.ProviderName;
+
+//            var manager = ManagerBase.GetMappedManager(contentType, providerName);
+//            var item = manager.GetItemOrDefault(contentType, itemId);
+            
+            Trace.WriteLine($"AzureServicePublisher: Executing data event {action} {contentType} {itemId} {providerName}");
         }
 
     }
